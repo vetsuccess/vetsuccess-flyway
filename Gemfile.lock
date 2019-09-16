@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    vetsuccess-flyway (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  vetsuccess-flyway!
+
+BUNDLED WITH
+   1.16.0.pre.3
