@@ -13,10 +13,6 @@ module Vetsuccess
 
       def execute_command
         command = "#{executable_path} #{type} #{flyway_command_options}"
-        puts "About to execute #{
-          command.gsub(password, '*********')
-                 .gsub(user, '*********')
-        }"
         system command
       end
 
