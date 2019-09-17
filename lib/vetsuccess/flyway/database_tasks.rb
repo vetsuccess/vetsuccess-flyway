@@ -21,19 +21,19 @@ module Vetsuccess
       attr_reader :type, :cluster
 
       def host_suffix
-        ENV['FLYWAY_HOST_SUFFIX']
+        ENV['REDSHIFT_COPY_HOST_SUFFIX']
       end
 
       def port
-        ENV['FLYWAY_HOST_PORT']
+        ENV['REDSHIFT_COPY_PORT']
       end
 
       def password
-        ENV['FLYWAY_PASSWORD']
+        ENV['REDSHIFT_COPY_PASSWORD']
       end
 
       def user
-        ENV['FLYWAY_USERNAME']
+        ENV['REDSHIFT_COPY_USERNAME']
       end
 
       def database
