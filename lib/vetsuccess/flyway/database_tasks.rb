@@ -52,8 +52,7 @@ module Vetsuccess
         [
           "-url=jdbc:redshift://#{cluster}.#{host_suffix}:#{port}/#{database}",
           "-user=#{user}",
-          "-password=#{password}",
-          "-locations=filesystem:#{directory}"
+          "-password=#{password}"
         ].join(' ')
       end
 
