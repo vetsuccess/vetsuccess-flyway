@@ -29,7 +29,7 @@ module Vetsuccess
       end
 
       def password
-        ENV['REDSHIFT_COPY_PASSWORD']
+        cluster == ENV['REDSHIFT_TEST_CLUSTER'] ? ENV['REDSHIFT_TEST_COPY_PASSWORD'] : ENV['REDSHIFT_COPY_PASSWORD']
       end
 
       def user
