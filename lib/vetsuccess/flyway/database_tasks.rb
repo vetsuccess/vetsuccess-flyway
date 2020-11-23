@@ -2,13 +2,14 @@ module Vetsuccess
   module Flyway
     class DatabaseTasks
 
-      def self.execute_command(type, cluster)
-        new(type, cluster).execute_command
+      def self.execute_command(type, cluster, database = cluster)
+        new(type, cluster, database).execute_command
       end
 
-      def initialize(type, cluster)
+      def initialize(type, cluster, database)
         @type = type
         @cluster = cluster
+        @database = database
       end
 
       def execute_command
@@ -18,7 +19,7 @@ module Vetsuccess
 
       private
 
-      attr_reader :type, :cluster
+      attr_reader :type, :cluster, :database
 
       def host_suffix
         ENV['REDSHIFT_COPY_HOST_SUFFIX']
@@ -34,10 +35,6 @@ module Vetsuccess
 
       def user
         ENV['REDSHIFT_COPY_USERNAME']
-      end
-
-      def database
-        cluster
       end
 
       def directory
