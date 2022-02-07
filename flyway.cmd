@@ -1,5 +1,5 @@
 @REM
-@REM Copyright 2010-2018 Boxfuse GmbH
+@REM Copyright © Red Gate Software Ltd 2010-2020
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -34,9 +34,6 @@ if exist "%INSTALLDIR%\jre\bin\java.exe" (
  )
 )
 
-SET CP=
-IF DEFINED CLASSPATH ( SET CP=%CLASSPATH%;)
-
 if "%JAVA_ARGS%"=="" (
   set JAVA_ARGS=
 )
@@ -49,10 +46,14 @@ IF NOT [%1]==[] (
         GOTO :loop-end
     )
     IF [%1]==[-pro] (
-        SET FLYWAY_EDITION=pro
+        SET FLYWAY_EDITION=enterprise
         GOTO :loop-end
     )
     IF [%1]==[-enterprise] (
+        SET FLYWAY_EDITION=enterprise
+        GOTO :loop-end
+    )
+    IF [%1]==[-teams] (
         SET FLYWAY_EDITION=enterprise
         GOTO :loop-end
     )
@@ -63,12 +64,32 @@ IF NOT [%1]==[] (
 if "%FLYWAY_EDITION%"=="" (
   set FLYWAY_EDITION=community
 )
+if "%FLYWAY_EDITION%"=="pro" (
+  set FLYWAY_EDITION=enterprise
+)
+if "%FLYWAY_EDITION%"=="teams" (
+  set FLYWAY_EDITION=enterprise
+)
 
-%JAVA_CMD% %JAVA_ARGS% -cp "%CP%%INSTALLDIR%\lib\%FLYWAY_EDITION%\*;%INSTALLDIR%\drivers\*" org.flywaydb.commandline.Main %*
+@REM Validate the Flyway edition
+set editionValid=false
+for %%E in ("community" "pro" "enterprise" "teams" "community") do (
+  if "%FLYWAY_EDITION%"==%%E (
+    set editionValid=true
+  )
+)
+if %editionValid%==false (
+  @Echo on
+  echo invalid edition "%FLYWAY_EDITION%"
+  @Echo off
+  EXIT /B 1
+)
+
+%JAVA_CMD% -Djava.library.path="%INSTALLDIR%\native" %JAVA_ARGS% -cp "%CLASSPATH%;%INSTALLDIR%\lib\*;%INSTALLDIR%\lib\%FLYWAY_EDITION%\*;%INSTALLDIR%\drivers\*" org.flywaydb.commandline.Main %*
 
 @REM Exit using the same code returned from Java
 EXIT /B %ERRORLEVEL%
 
-:getCurrentBatch variableName
+:getCurrentBatch
     set "%~1=%~f0"
     goto :eof
